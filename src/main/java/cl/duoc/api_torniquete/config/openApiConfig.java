@@ -1,13 +1,21 @@
 package cl.duoc.api_torniquete.config;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+
 @Configuration
-public class OpenApiConfig {
+public class openApiConfig {
     @Bean
     public OpenAPI scooterOpenAPi(){
         return new OpenAPI()
                 .info(new Info()
-                        .title ("API Monopatin(Scooter) - Servicio de Monopatin")
-                        .description ("Gestiona el inventario. el estado de scooter - CRUD Completo")
+                        .title ("API ironfit(toriniquete) - Servicio de ironfit")
+                        .description ("Gestiona el acceso de los torniquetes - CRUD Completo")
                         .version ("1.0")
                         .contact(new Contact()
                                 .name("DoucUC")
