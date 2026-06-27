@@ -1,4 +1,4 @@
-package cl.duoc.api_torniquete.config;
+package cl.duoc.api_ironfit_socios.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;

@@ -1,10 +1,10 @@
-package cl.duoc.api_torniquete;
+package cl.duoc.api_socios;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ApiTorniqueteApplicationTests {
+class ApiSociosApplicationTests {
 
 	@Test
 	void contextLoads() {

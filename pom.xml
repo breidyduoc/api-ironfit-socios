@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>cl.duoc</groupId>
-	<artifactId>api-torniquete</artifactId>
+	<artifactId>api-ironfit-socios</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
 	<description/>
