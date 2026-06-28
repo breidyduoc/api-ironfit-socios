@@ -7,21 +7,19 @@ import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
 @Configuration
-public class ironfitApiConfig {
+public class IronfitApiConfig {
     @Bean
-    public OpenAPI ironfitOpenAPi(){
+    public OpenAPI ironfitOpenApi() {
         return new OpenAPI()
                 .info(new Info()
-                        .title ("API ironfit(socios) - Servicio de ironfit")
-                        .description ("Gestiona el acceso de los socios - CRUD Completo")
-                        .version ("2.0")
+                        .title("API IronFit (Socios)")
+                        .description("Gestiona el acceso de los socios - CRUD completo")
+                        .version("3.0")
                         .contact(new Contact()
-                                .name("DoucUC")
+                                .name("DuocUC")
                                 .email("soporte@duoc.cl"))
                         .license(new License()
-                                .name("Uso academico"))
-                );
+                                .name("Uso académico")));
     }
 }
