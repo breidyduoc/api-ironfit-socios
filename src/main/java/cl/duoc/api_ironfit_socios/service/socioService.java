@@ -1,8 +1,8 @@
-package cl.duoc.api_ironfit_socios.socioService;
+package cl.duoc.api_ironfit_socios.service;
 
-import cl.duoc.api_ironfit_socios.DTO.socioDTO;
-import cl.duoc.api_ironfit_socios.socioModel.socioModel;
-import cl.duoc.api_ironfit_socios.socioRepository.socioRepository;
+import cl.duoc.api_ironfit_socios.dto.socioDTO;
+import cl.duoc.api_ironfit_socios.model.socioModel;
+import cl.duoc.api_ironfit_socios.repository.socioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

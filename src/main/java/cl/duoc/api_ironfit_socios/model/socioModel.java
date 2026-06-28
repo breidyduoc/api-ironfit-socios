@@ -1,4 +1,4 @@
-package cl.duoc.api_ironfit_socios.socioModel;
+package cl.duoc.api_ironfit_socios.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -36,7 +36,7 @@ public class socioModel{
     @Column(name = "ESTADO", nullable = false)
     @NotBlank(message = "El estado es obligatorio")
     @Pattern(regexp = "DISPONIBLE|EN_USO|MANTENIMIENTO", message = "El estado debe ser DISPONIBLE, EN_USO o MANTENIMIENTO.")
-    private String Estado;
+    private String estado;
 
     @Column(name = "ULTIMO_ACCESO")
     private LocalDate ultimoAcceso;

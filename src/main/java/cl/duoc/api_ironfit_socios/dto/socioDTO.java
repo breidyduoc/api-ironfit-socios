@@ -1,4 +1,4 @@
-package cl.duoc.api_ironfit_socios.DTO;
+package cl.duoc.api_ironfit_socios.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;

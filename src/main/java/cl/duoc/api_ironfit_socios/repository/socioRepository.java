@@ -1,6 +1,6 @@
-package cl.duoc.api_ironfit_socios.socioRepository;
+package cl.duoc.api_ironfit_socios.repository;
 
-import cl.duoc.api_ironfit_socios.socioModel.socioModel;
+import cl.duoc.api_ironfit_socios.model.socioModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

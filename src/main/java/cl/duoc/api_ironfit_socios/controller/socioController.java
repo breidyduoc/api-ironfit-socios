@@ -1,8 +1,8 @@
-package cl.duoc.api_ironfit_socios.socioController;
+package cl.duoc.api_ironfit_socios.controller;
 
-import cl.duoc.api_ironfit_socios.DTO.socioDTO;
-import cl.duoc.api_ironfit_socios.socioModel.socioModel;
-import cl.duoc.api_ironfit_socios.socioService.socioService;
+import cl.duoc.api_ironfit_socios.dto.socioDTO;
+import cl.duoc.api_ironfit_socios.model.socioModel;
+import cl.duoc.api_ironfit_socios.service.socioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
