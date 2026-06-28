@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-public class openApiConfig {
+public class ironfitApiConfig {
     @Bean
-    public OpenAPI scooterOpenAPi(){
+    public OpenAPI ironfitOpenAPi(){
         return new OpenAPI()
                 .info(new Info()
                         .title ("API ironfit(socios) - Servicio de ironfit")

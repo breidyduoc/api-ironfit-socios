@@ -33,9 +33,10 @@ public class socioModel{
     @Min(value = 15, message = "La edad mínima permitida es 15 años")
     private Integer edad;
 
-    @Column(name = "ESTADO", nullable = false, length = 20)
+    @Column(name = "ESTADO", nullable = false)
     @NotBlank(message = "El estado es obligatorio")
-    private String estado;
+    @Pattern(regexp = "DISPONIBLE|EN_USO|MANTENIMIENTO", message = "El estado debe ser DISPONIBLE, EN_USO o MANTENIMIENTO.")
+    private String Estado;
 
     @Column(name = "ULTIMO_ACCESO")
     private LocalDate ultimoAcceso;

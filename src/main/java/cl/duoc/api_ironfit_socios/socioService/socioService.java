@@ -3,6 +3,7 @@ package cl.duoc.api_ironfit_socios.socioService;
 import cl.duoc.api_ironfit_socios.DTO.socioDTO;
 import cl.duoc.api_ironfit_socios.socioModel.socioModel;
 import cl.duoc.api_ironfit_socios.socioRepository.socioRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +46,7 @@ public class socioService {
         return repository.findByEdad(edad);
     }
 
+    @Transactional
     public socioModel crearSocio(socioDTO dto) {
         socioModel socio = new socioModel();
         mapearDtoAModel(dto, socio);
@@ -52,6 +54,7 @@ public class socioService {
         return repository.save(socio);
     }
 
+    @Transactional
     public Optional<socioModel> actualizaSocio(Long id, socioDTO dto) {
         return repository.findById(id).map(socio -> {
             mapearDtoAModel(dto, socio);
@@ -59,6 +62,7 @@ public class socioService {
         });
     }
 
+    @Transactional
     public Optional<socioModel> actualizaEstado(Long id, String nuevoEstado) {
         return repository.findById(id).map(socio -> {
             socio.setEstado(nuevoEstado);
@@ -66,6 +70,7 @@ public class socioService {
         });
     }
 
+    @Transactional
     public boolean borrarSocio(Long id) {
         if (repository.existsById(id)) {
             repository.deleteById(id);
