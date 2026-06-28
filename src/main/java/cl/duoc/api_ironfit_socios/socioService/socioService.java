@@ -1,0 +1,76 @@
+package cl.duoc.api_ironfit_socios.socioService;
+
+import cl.duoc.api_ironfit_socios.DTO.socioDTO;
+import cl.duoc.api_ironfit_socios.socioModel.socioModel;
+import cl.duoc.api_ironfit_socios.socioRepository.socioRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@RequiredArgsConstructor
+@Service
+public class socioService {
+
+    private final socioRepository repository;
+
+    private void mapearDtoAModel(socioDTO dto, socioModel socio) {
+        socio.setRut(dto.getRut());
+        socio.setNombre(dto.getNombre());
+        socio.setApellido(dto.getApellido());
+        socio.setEdad(dto.getEdad());
+        socio.setEstado(dto.getEstado());
+        socio.setUltimoAcceso(dto.getUltimoAcceso());
+        socio.setSucursal(dto.getSucursal());
+    }
+
+    public List<socioModel> obtenerTodosLosSocios() {
+        return repository.findAll();
+    }
+
+    public Optional<socioModel> obtenerSocioPorId(Long id) {
+        return repository.findById(id);
+    }
+
+    public Optional<socioModel> obtenerSocioPorRut(String rut) {
+        return repository.findByRut(rut);
+    }
+
+    public Optional<socioModel> obtenerSocioPorEstado(String estado){
+        return repository.findByEstado(estado);
+    }
+
+    public Optional<socioModel> obtenerSocioPorEdad(Integer edad){
+        return repository.findByEdad(edad);
+    }
+
+    public socioModel crearSocio(socioDTO dto) {
+        socioModel socio = new socioModel();
+        mapearDtoAModel(dto, socio);
+
+        return repository.save(socio);
+    }
+
+    public Optional<socioModel> actualizaSocio(Long id, socioDTO dto) {
+        return repository.findById(id).map(socio -> {
+            mapearDtoAModel(dto, socio);
+            return repository.save(socio);
+        });
+    }
+
+    public Optional<socioModel> actualizaEstado(Long id, String nuevoEstado) {
+        return repository.findById(id).map(socio -> {
+            socio.setEstado(nuevoEstado);
+            return repository.save(socio);
+        });
+    }
+
+    public boolean borrarSocio(Long id) {
+        if (repository.existsById(id)) {
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+}

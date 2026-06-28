@@ -14,9 +14,9 @@ public class openApiConfig {
     public OpenAPI scooterOpenAPi(){
         return new OpenAPI()
                 .info(new Info()
-                        .title ("API ironfit(toriniquete) - Servicio de ironfit")
-                        .description ("Gestiona el acceso de los torniquetes - CRUD Completo")
-                        .version ("1.0")
+                        .title ("API ironfit(socios) - Servicio de ironfit")
+                        .description ("Gestiona el acceso de los socios - CRUD Completo")
+                        .version ("2.0")
                         .contact(new Contact()
                                 .name("DoucUC")
                                 .email("soporte@duoc.cl"))
