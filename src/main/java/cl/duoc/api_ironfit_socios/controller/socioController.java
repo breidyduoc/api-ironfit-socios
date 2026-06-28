@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v2/socios")
+@RequestMapping("/api/v3/socios")
 public class socioController {
 
     private final socioService service;
