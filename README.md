@@ -44,16 +44,19 @@ spring:
 ```
 ## Variables de entorno
 
-```yaml
-spring:
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+```env
+DB_URL=jdbc:oracle:thin:@localhost:1521:xe
+DB_USER=TU_USUARIO
+DB_PASSWORD=TU_PASSWORD
 ```
 
-Crear tabla:
+---
 
+## Script SQL
+
+crear tabla:
+
+```sql
 CREATE TABLE SOCIO (
     ID_SOCIO NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     RUT VARCHAR2(12) NOT NULL UNIQUE,
@@ -64,39 +67,61 @@ CREATE TABLE SOCIO (
     ULTIMO_ACCESO DATE,
     SUCURSAL VARCHAR2(50)
 );
-Ejecución
-Clonar repositorio
-Configurar variables de entorno
-Ejecutar script SQL en Oracle
-Ejecutar:
+```
+
+## Ejecución
+
+- Clonar repositorio
+- Configurar variables de entorno
+- Ejecutar script SQL en Oracle
+- Ejecutar:
+```bash
 mvn clean install
 mvn spring-boot:run
-Puerto
+```
+
+--
+
+## Puerto
+
 21502
-Swagger
+
+---
+
+## Swagger
 
 http://localhost:21502/swagger-ui/index.html
 
-Endpoints principales
-GET /api/v3/socios
-GET /api/v3/socios/{id}
-GET /api/v3/socios/rut/{rut}
-GET /api/v3/socios/estado/{estado}
-GET /api/v3/socios/edad/{edad}
-POST /api/v3/socios
-PUT /api/v3/socios/{id}
-PATCH /api/v3/socios/{id}
-DELETE /api/v3/socios/{id}
-Manejo global de excepciones
+---
+
+## Endpoints principales
+- GET /api/v3/socios
+- GET /api/v3/socios/{id}
+- GET /api/v3/socios/rut/{rut}
+- GET /api/v3/socios/estado/{estado}
+- GET /api/v3/socios/edad/{edad}
+- POST /api/v3/socios
+- PUT /api/v3/socios/{id}
+- PATCH /api/v3/socios/{id}
+- DELETE /api/v3/socios/{id}
+
+---
+
+## Manejo global de excepciones
 
 El proyecto implementa un @RestControllerAdvice para centralizar el manejo de errores.
 
-Gestiona:
+### Errores gestionados
 
-400 Bad Request → errores de validación o datos inválidos
-404 Not Found → socio no encontrado
-500 Internal Server Error → errores inesperados del sistema
-Formato de respuesta:
+-400 Bad Request → errores de validación o datos inválidos
+-404 Not Found → socio no encontrado
+-500 Internal Server Error → errores inesperados del sistema
+
+---
+
+### Formato de respuesta
+
+```json
 {
   "fecha": "2026-06-28T12:30:00",
   "status": 404,
@@ -104,23 +129,32 @@ Formato de respuesta:
   "mensaje": "El socio solicitado no existe",
   "ruta": "/api/v3/socios/99"
 }
-Beneficios:
-Centraliza excepciones
-Mantiene respuestas consistentes
-Mejora trazabilidad
-Facilita pruebas
-Testing
+```
+
+---
+
+### Beneficios
+
+- Centraliza excepciones
+- Mantiene respuestas consistentes
+- Mejora trazabilidad
+- Facilita pruebas
+- Testing
+
+---
+
+## Testing
 
 Incluye pruebas unitarias de:
 
-Model
-Service
-Controller
-Cobertura:
-200 OK
-201 CREATED
-400 BAD REQUEST
-404 NOT FOUND
-500 INTERNAL SERVER ERROR
+- Model
+- Service
+- Controller
 
-Los errores son gestionados por el Global Exception Handler.
+### Cobertura
+
+- 200 OK  
+- 201 CREATED  
+- 400 BAD REQUEST  
+- 404 NOT FOUND  
+- 500 INTERNAL SERVER ERROR  
