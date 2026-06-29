@@ -5,12 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-
+import java.util.List;
 @Repository
 public interface socioRepository extends JpaRepository<socioModel, Long> {
 
     Optional<socioModel> findByRut(String rut);
-    Optional<socioModel> findByEstado(String estado);
-    Optional<socioModel> findByEdad(Integer edad);
+    List<socioModel> findByEstado(String estado);
+    List<socioModel> findByEdad(Integer edad);
 
 }

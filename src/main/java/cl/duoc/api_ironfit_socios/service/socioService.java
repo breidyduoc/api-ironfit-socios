@@ -38,11 +38,11 @@ public class socioService {
         return repository.findByRut(rut);
     }
 
-    public Optional<socioModel> obtenerSocioPorEstado(String estado){
+    public List<socioModel> obtenerSocioPorEstado(String estado){
         return repository.findByEstado(estado);
     }
 
-    public Optional<socioModel> obtenerSocioPorEdad(Integer edad){
+    public List<socioModel> obtenerSocioPorEdad(Integer edad){
         return repository.findByEdad(edad);
     }
 

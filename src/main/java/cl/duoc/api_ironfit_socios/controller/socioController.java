@@ -122,13 +122,17 @@ public class socioController {
                     description = "Socio no encontrado"
             )
     })
-    public ResponseEntity<socioModel> obtenerPorEstado(
+    public ResponseEntity<List<socioModel>> obtenerPorEstado(
             @Parameter(description = "Estado del socio", example = "ACTIVO")
             @PathVariable String estado
     ) {
-        return service.obtenerSocioPorEstado(estado)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        List<socioModel> socios = service.obtenerSocioPorEstado(estado);
+
+        if (socios.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(socios);
     }
 
 
@@ -142,13 +146,17 @@ public class socioController {
             @ApiResponse(responseCode = "200", description = "Socios encontrados"),
             @ApiResponse(responseCode = "404", description = "No existen socios con esa edad")
     })
-    public ResponseEntity<socioModel> obtenerPorEdad(
+    public ResponseEntity<List<socioModel>> obtenerPorEdad(
             @Parameter(description = "Edad del socio", example = "18")
             @PathVariable Integer edad
     ) {
-        return service.obtenerSocioPorEdad(edad)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        List<socioModel> socios = service.obtenerSocioPorEdad(edad);
+
+        if (socios.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(socios);
     }
 
 
