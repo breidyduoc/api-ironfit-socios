@@ -1,44 +1,56 @@
-API IronFit - Socios
-Descripción
+# API IronFit - Socios
+
+## Descripción
 
 Microservicio encargado de la gestión de socios dentro del sistema IronFit.
 
-Este Permite:
+Permite:
 
-Registrar socios
-Consultar socios
-Actualizar información
-Modificar estado
-Eliminar socios
-Tecnologías utilizadas
-Java 21
-Spring Boot
-Spring Data JPA
-Oracle Database
-Oracle SQL Developer
-Swagger/OpenAPI
-Maven
-Lombok
-Validation API
-JUnit 5
-Mockito
-Global Exception Handler (@RestControllerAdvice)
-Configuración de base de datos
+- Registrar socios  
+- Consultar socios  
+- Actualizar información  
+- Modificar estado  
+- Eliminar socios  
 
-Configurar en application.yml:
+---
 
+## Tecnologías utilizadas
+
+- Java 21  
+- Spring Boot  
+- Spring Data JPA  
+- Oracle Database  
+- Oracle SQL Developer  
+- Swagger/OpenAPI  
+- Maven  
+- Lombok  
+- Validation API  
+- JUnit 5  
+- Mockito  
+- Global Exception Handler (@RestControllerAdvice)  
+
+---
+
+## Configuración de base de datos
+
+Configurar en `application.yml`:
+
+```yaml
 spring:
   datasource:
     url: ${DB_URL}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+```
+## Variables de entorno
 
-Variables de entorno:
-
-DB_URL=jdbc:oracle:thin:@ TU_URL O LOCALHOST
-DB_USER=TU_USUARIO
-DB_PASSWORD=TU_PASSWORD
-Script SQL
+```yaml
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+```
 
 Crear tabla:
 
@@ -52,7 +64,6 @@ CREATE TABLE SOCIO (
     ULTIMO_ACCESO DATE,
     SUCURSAL VARCHAR2(50)
 );
-
 Ejecución
 Clonar repositorio
 Configurar variables de entorno
@@ -61,9 +72,7 @@ Ejecutar:
 mvn clean install
 mvn spring-boot:run
 Puerto
-
 21502
-
 Swagger
 
 http://localhost:21502/swagger-ui/index.html
@@ -80,16 +89,14 @@ PATCH /api/v3/socios/{id}
 DELETE /api/v3/socios/{id}
 Manejo global de excepciones
 
-El proyecto implementa un Global Exception Handler mediante @RestControllerAdvice, centralizando el manejo de errores.
+El proyecto implementa un @RestControllerAdvice para centralizar el manejo de errores.
 
 Gestiona:
 
-400 Bad Request → errores de validación o datos inválidos.
-404 Not Found → socio no encontrado.
-500 Internal Server Error → errores inesperados del sistema.
-
+400 Bad Request → errores de validación o datos inválidos
+404 Not Found → socio no encontrado
+500 Internal Server Error → errores inesperados del sistema
 Formato de respuesta:
-
 {
   "fecha": "2026-06-28T12:30:00",
   "status": 404,
@@ -97,9 +104,7 @@ Formato de respuesta:
   "mensaje": "El socio solicitado no existe",
   "ruta": "/api/v3/socios/99"
 }
-
 Beneficios:
-
 Centraliza excepciones
 Mantiene respuestas consistentes
 Mejora trazabilidad
@@ -111,9 +116,7 @@ Incluye pruebas unitarias de:
 Model
 Service
 Controller
-
 Cobertura:
-
 200 OK
 201 CREATED
 400 BAD REQUEST
