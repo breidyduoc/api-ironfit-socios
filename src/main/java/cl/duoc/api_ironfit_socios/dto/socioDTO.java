@@ -25,6 +25,7 @@ public class socioDTO {
 
     @NotBlank(message = "El estado es obligatorio")
     @Size(max = 20, message = "El estado no puede superar los 20 caracteres")
+    @Pattern(regexp = "ACTIVO|INACTIVO|SUSPENDIDO",message = "El estado debe ser ACTIVO,INACTIVO o SUSPENDIDO")
     private String estado;
 
     private LocalDate ultimoAcceso;

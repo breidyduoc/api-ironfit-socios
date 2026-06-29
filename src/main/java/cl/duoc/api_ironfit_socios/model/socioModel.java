@@ -35,7 +35,7 @@ public class socioModel{
 
     @Column(name = "ESTADO", nullable = false)
     @NotBlank(message = "El estado es obligatorio")
-    @Pattern(regexp = "DISPONIBLE|EN_USO|MANTENIMIENTO", message = "El estado debe ser DISPONIBLE, EN_USO o MANTENIMIENTO.")
+    @Pattern(regexp = "ACTIVO|INACTIVO|SUSPENDIDO", message = "El estado debe ser ACTIVO, INACTIVO o SUSPENDIDO.")
     private String estado;
 
     @Column(name = "ULTIMO_ACCESO")
