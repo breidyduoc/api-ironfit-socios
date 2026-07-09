@@ -1,5 +1,6 @@
 package cl.duoc.api_socios.controllerTest;
 
+import cl.duoc.api_ironfit_socios.dto.estadoFinancieroDTO;
 import cl.duoc.api_ironfit_socios.dto.socioDTO;
 import cl.duoc.api_ironfit_socios.controller.socioController;
 import cl.duoc.api_ironfit_socios.model.socioModel;
@@ -20,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -89,6 +91,9 @@ public class SocioControllerTest {
                 "SAN_BERNARDO",
                 response.getBody().getFirst().getSucursal()
         );
+
+        verify(service)
+                .obtenerSociosPorSucursal("SAN_BERNARDO");
     }
 
     @Test
@@ -96,11 +101,11 @@ public class SocioControllerTest {
     void obtenerPorSucursalNotFound(){
 
         when(service.obtenerSociosPorSucursal("VALDIVIA"))
-                .thenThrow(new RuntimeException("No existen socios"));
+                .thenThrow(new IllegalStateException("No existen socios"));
 
 
         assertThrows(
-                RuntimeException.class,
+                IllegalStateException.class,
                 () -> controller.obtenerPorSucursal("VALDIVIA")
         );
     }
@@ -127,6 +132,9 @@ public class SocioControllerTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(1, response.getBody().size());
+
+        verify(service)
+                .obtenerSociosInactivos(fecha);
     }
 
     @Test
@@ -136,12 +144,49 @@ public class SocioControllerTest {
         LocalDate fecha = LocalDate.of(2026,6,1);
 
         when(service.obtenerSociosInactivos(fecha))
-                .thenThrow(new RuntimeException("No existen socios inactivos"));
+                .thenThrow(new IllegalStateException("No existen socios inactivos"));
 
 
         assertThrows(
-                RuntimeException.class,
+                IllegalStateException.class,
                 () -> controller.obtenerInactivos(fecha)
+        );
+    }
+
+    @Test
+    @DisplayName("Código 200 - Obtener estado financiero del socio")
+    void obtenerEstadoFinancieroOk(){
+
+        estadoFinancieroDTO estado = new estadoFinancieroDTO();
+
+        estado.setRut("12345678-9");
+        estado.setEstado("ACTIVO");
+        estado.setPoseeDeuda(false);
+
+
+        when(service.obtenerEstadoFinanciero("12345678-9"))
+                .thenReturn(estado);
+
+
+        ResponseEntity<estadoFinancieroDTO> response =
+                controller.estadoFinanciero("12345678-9");
+
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+
+        assertEquals(
+                "12345678-9",
+                response.getBody().getRut()
+        );
+
+        assertEquals(
+                "ACTIVO",
+                response.getBody().getEstado()
+        );
+
+        assertFalse(
+                response.getBody().isPoseeDeuda()
         );
     }
 

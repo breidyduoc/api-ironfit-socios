@@ -1,5 +1,6 @@
 package cl.duoc.api_ironfit_socios.controller;
 
+import cl.duoc.api_ironfit_socios.dto.estadoFinancieroDTO;
 import cl.duoc.api_ironfit_socios.dto.socioDTO;
 import cl.duoc.api_ironfit_socios.model.socioModel;
 import cl.duoc.api_ironfit_socios.service.socioService;
@@ -245,5 +246,27 @@ public class socioController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+
+    @GetMapping("/{rut}/estado-financiero")
+    @Operation(
+            summary = "Consultar estado financiero del socio",
+            description = "Consulta información financiera desde el microservicio Finanzas"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Estado financiero obtenido correctamente"
+            )
+    })
+    public ResponseEntity<estadoFinancieroDTO> estadoFinanciero(
+            @PathVariable String rut
+    ){
+
+        return ResponseEntity.ok(
+                service.obtenerEstadoFinanciero(rut)
+        );
+
     }
 }

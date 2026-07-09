@@ -1,5 +1,6 @@
 package cl.duoc.api_socios.serviceTest;
 
+import cl.duoc.api_ironfit_socios.dto.estadoFinancieroDTO;
 import cl.duoc.api_ironfit_socios.dto.socioDTO;
 import cl.duoc.api_ironfit_socios.model.socioModel;
 import cl.duoc.api_ironfit_socios.repository.socioRepository;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +23,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SocioServiceTest {
+
+    @Mock
+    private RestTemplate restTemplate;
 
     @Mock
     private socioRepository repository;
@@ -159,6 +164,30 @@ public class SocioServiceTest {
                         LocalDate.of(2026,6,1)
                 )
         );
+    }
+
+    @Test
+    @DisplayName("Consultar estado financiero correctamente")
+    void estadoFinancieroOk(){
+
+        estadoFinancieroDTO dto = new estadoFinancieroDTO();
+
+        dto.setRut("12345678-9");
+        dto.setPoseeDeuda(false);
+
+
+        when(restTemplate.getForObject(
+                anyString(),
+                eq(estadoFinancieroDTO.class)
+        ))
+                .thenReturn(dto);
+
+
+        estadoFinancieroDTO resultado =
+                service.obtenerEstadoFinanciero("12345678-9");
+
+
+        assertFalse(resultado.isPoseeDeuda());
     }
 
     // 201 CREATE

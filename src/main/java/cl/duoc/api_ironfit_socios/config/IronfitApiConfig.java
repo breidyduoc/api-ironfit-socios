@@ -15,7 +15,7 @@ public class IronfitApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("API IronFit (Socios)")
-                        .description("Gestiona el acceso de los socios - CRUD completo")
+                        .description("Gestiona socios, actividad operacional e integración financiera")
                         .version("4.0")
                         .contact(new Contact()
                                 .name("DuocUC")
