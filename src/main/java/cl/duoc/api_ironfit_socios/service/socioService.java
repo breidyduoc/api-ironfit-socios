@@ -113,7 +113,7 @@ public class socioService {
     public estadoFinancieroDTO obtenerEstadoFinanciero(String rut){
 
         return restTemplate.getForObject(
-                "http://localhost:21501/api/v4/pagos/socio/"
+                "http://localhost:21503/api/v4/pagos/socio/"
                         + rut
                         + "/estado",
                 estadoFinancieroDTO.class

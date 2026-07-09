@@ -249,7 +249,7 @@ public class socioController {
     }
 
 
-    @GetMapping("/{rut}/estado-financiero")
+    @GetMapping("/{rut}/estado")
     @Operation(
             summary = "Consultar estado financiero del socio",
             description = "Consulta información financiera desde el microservicio Finanzas"
