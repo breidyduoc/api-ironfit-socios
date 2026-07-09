@@ -11,15 +11,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v3/socios")
+@RequestMapping("/api/v4/socios")
 public class socioController {
 
     private final socioService service;
@@ -70,16 +72,16 @@ public class socioController {
     }
 
 
-
     @GetMapping("/{id}")
     @Operation(
             summary = "Buscar socio por ID",
             description = "Obtiene un socio específico según su ID"
     )
-    public ResponseEntity<socioModel> obtenerPorId(
-            @Parameter(description = "ID del socio", example = "1")
-            @PathVariable Long id
-    ) {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Socio encontrado"),
+            @ApiResponse(responseCode = "404", description = "Socio no encontrado")
+    })
+    public ResponseEntity<socioModel> obtenerPorId(@Parameter(description = "ID del socio", example = "1") @PathVariable Long id) {
         return service.obtenerSocioPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -96,15 +98,11 @@ public class socioController {
             @ApiResponse(responseCode = "200", description = "Socio encontrado"),
             @ApiResponse(responseCode = "404", description = "Socio no encontrado")
     })
-    public ResponseEntity<socioModel> obtenerPorRut(
-            @Parameter(description = "RUT del socio", example = "12345678-9")
-            @PathVariable String rut
-    ) {
+    public ResponseEntity<socioModel> obtenerPorRut(@Parameter(description = "RUT del socio", example = "12345678-9") @PathVariable String rut) {
         return service.obtenerSocioPorRut(rut)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
 
 
     @GetMapping("/estado/{estado}")
@@ -113,19 +111,10 @@ public class socioController {
             description = "Obtiene socios según su estado actual"
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Socio encontrado"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Socio no encontrado"
-            )
+            @ApiResponse(responseCode = "200",description = "Socio encontrado"),
+            @ApiResponse(responseCode = "404",description = "Socio no encontrado")
     })
-    public ResponseEntity<List<socioModel>> obtenerPorEstado(
-            @Parameter(description = "Estado del socio", example = "ACTIVO")
-            @PathVariable String estado
-    ) {
+    public ResponseEntity<List<socioModel>> obtenerPorEstado(@Parameter(description = "Estado del socio", example = "ACTIVO") @PathVariable String estado) {
         List<socioModel> socios = service.obtenerSocioPorEstado(estado);
 
         if (socios.isEmpty()) {
@@ -134,7 +123,6 @@ public class socioController {
 
         return ResponseEntity.ok(socios);
     }
-
 
 
     @GetMapping("/edad/{edad}")
@@ -146,10 +134,7 @@ public class socioController {
             @ApiResponse(responseCode = "200", description = "Socios encontrados"),
             @ApiResponse(responseCode = "404", description = "No existen socios con esa edad")
     })
-    public ResponseEntity<List<socioModel>> obtenerPorEdad(
-            @Parameter(description = "Edad del socio", example = "18")
-            @PathVariable Integer edad
-    ) {
+    public ResponseEntity<List<socioModel>> obtenerPorEdad(@Parameter(description = "Edad del socio", example = "18") @PathVariable Integer edad) {
         List<socioModel> socios = service.obtenerSocioPorEdad(edad);
 
         if (socios.isEmpty()) {
@@ -160,6 +145,37 @@ public class socioController {
     }
 
 
+    @GetMapping("/sucursal/{sucursal}")
+    @Operation(
+            summary = "Buscar socios por sucursal",
+            description = "Obtiene todos los socios pertenecientes a una sede"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Socios encontrados correctamente"),
+            @ApiResponse(responseCode = "404", description = "Socios no encontrados ")
+    })
+    public ResponseEntity<List<socioModel>> obtenerPorSucursal(@Parameter(description = "Sucursal del socio", example = "SAN_BERNARDO")@PathVariable String sucursal){
+
+        return ResponseEntity.ok(
+                service.obtenerSociosPorSucursal(sucursal)
+        );
+    }
+
+    @GetMapping("/inactivos")
+    @Operation(
+            summary = "Buscar socios inactivos",
+            description = "Obtiene socios cuyo último acceso es anterior a una fecha"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Socios encontrados correctamente"),
+            @ApiResponse(responseCode = "404", description = "Socios no encontrados")
+    })
+    public ResponseEntity<List<socioModel>> obtenerInactivos(@Parameter(description = "Fecha límite para buscar inactividad",example = "2026-06-01")@RequestParam LocalDate fecha){
+
+        return ResponseEntity.ok(
+                service.obtenerSociosInactivos(fecha)
+        );
+    }
 
     @PostMapping
     @Operation(
@@ -170,13 +186,11 @@ public class socioController {
             @ApiResponse(responseCode = "201", description = "Socio creado correctamente"),
             @ApiResponse(responseCode = "400", description = "Datos inválidos")
     })
-    public ResponseEntity<socioModel> crearSocio(
-            @Valid @RequestBody socioDTO dto
-    ) {
+    public ResponseEntity<socioModel> crearSocio(@Valid @RequestBody socioDTO dto) {
         socioModel nuevoSocio = service.crearSocio(dto);
-        return ResponseEntity.ok(nuevoSocio);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(nuevoSocio);
     }
-
 
 
     @PutMapping("/{id}")
@@ -189,15 +203,11 @@ public class socioController {
             @ApiResponse(responseCode = "404", description = "Socio no encontrado"),
             @ApiResponse(responseCode = "400", description = "Datos inválidos")
     })
-    public ResponseEntity<socioModel> actualizarSocio(
-            @PathVariable Long id,
-            @Valid @RequestBody socioDTO dto
-    ) {
+    public ResponseEntity<socioModel> actualizarSocio(@PathVariable Long id,@Valid @RequestBody socioDTO dto) {
         return service.actualizaSocio(id, dto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
 
 
     @PatchMapping("/{id}")
@@ -210,10 +220,7 @@ public class socioController {
             @ApiResponse(responseCode = "404", description = "Socio no encontrado"),
             @ApiResponse(responseCode = "400", description = "Estado inválido")
     })
-    public ResponseEntity<socioModel> actualizarEstado(
-            @PathVariable Long id,
-            @RequestBody Map<String, String> request
-    ) {
+    public ResponseEntity<socioModel> actualizarEstado(@PathVariable Long id,@RequestBody Map<String, String> request) {
         String nuevoEstado = request.get("estado");
 
         return service.actualizaEstado(id, nuevoEstado)

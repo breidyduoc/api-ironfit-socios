@@ -1,5 +1,6 @@
 package cl.duoc.api_socios.serviceTest;
 
+import cl.duoc.api_ironfit_socios.dto.socioDTO;
 import cl.duoc.api_ironfit_socios.model.socioModel;
 import cl.duoc.api_ironfit_socios.repository.socioRepository;
 import cl.duoc.api_ironfit_socios.service.socioService;
@@ -13,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -79,14 +81,103 @@ public class SocioServiceTest {
         assertTrue(result.isEmpty());
     }
 
+    @Test
+    @DisplayName("Buscar socios por sucursal correctamente")
+    void getBySucursalOk(){
+
+        socio.setSucursal("SAN_BERNARDO");
+
+        when(repository.findBySucursal("SAN_BERNARDO"))
+                .thenReturn(List.of(socio));
+
+        List<socioModel> result =
+                service.obtenerSociosPorSucursal("SAN_BERNARDO");
+
+        assertEquals(1, result.size());
+        assertEquals(
+                "SAN_BERNARDO",
+                result.getFirst().getSucursal()
+        );
+
+        verify(repository)
+                .findBySucursal("SAN_BERNARDO");
+    }
+
+    @Test
+    @DisplayName("Buscar sucursal sin socios devuelve error")
+    void getBySucursalNotFound(){
+
+        when(repository.findBySucursal("VALDIVIA"))
+                .thenReturn(List.of());
+
+        assertThrows(
+                IllegalStateException.class,
+                () -> service.obtenerSociosPorSucursal("VALDIVIA")
+        );
+    }
+
+    @Test
+    @DisplayName("Buscar socios inactivos correctamente")
+    void getSociosInactivosOk(){
+
+        socio.setUltimoAcceso(
+                LocalDate.of(2026,5,1)
+        );
+
+        when(repository.findByUltimoAccesoBefore(
+                LocalDate.of(2026,6,1)
+        ))
+                .thenReturn(List.of(socio));
+
+
+        List<socioModel> result =
+                service.obtenerSociosInactivos(
+                        LocalDate.of(2026,6,1)
+                );
+
+
+        assertEquals(1,result.size());
+        assertEquals(
+                LocalDate.of(2026,5,1),
+                result.getFirst().getUltimoAcceso()
+        );
+    }
+
+    @Test
+    @DisplayName("Sin socios inactivos genera error")
+    void getSociosInactivosNotFound(){
+
+        when(repository.findByUltimoAccesoBefore(
+                LocalDate.of(2026,6,1)
+        ))
+                .thenReturn(List.of());
+
+
+        assertThrows(
+                IllegalStateException.class,
+                () -> service.obtenerSociosInactivos(
+                        LocalDate.of(2026,6,1)
+                )
+        );
+    }
+
     // 201 CREATE
     @Test
     @DisplayName("Crear socio correctamente")
     void createSocio() {
 
-        when(repository.save(any(socioModel.class))).thenReturn(socio);
+        socioDTO dto = new socioDTO();
 
-        socioModel result = service.crearSocio(new cl.duoc.api_ironfit_socios.dto.socioDTO());
+        dto.setRut("12345678-9");
+        dto.setNombre("Juan");
+        dto.setApellido("Perez");
+        dto.setEdad(20);
+        dto.setEstado("ACTIVO");
+
+        when(repository.save(any(socioModel.class)))
+                .thenReturn(socio);
+
+        socioModel result = service.crearSocio(dto);
 
         assertNotNull(result);
         assertEquals("Juan", result.getNombre());

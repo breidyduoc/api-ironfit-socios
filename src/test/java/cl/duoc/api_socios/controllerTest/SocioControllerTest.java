@@ -69,6 +69,82 @@ public class SocioControllerTest {
         assertEquals(1, response.getBody().size());
     }
 
+    @Test
+    @DisplayName("Código 200 - Buscar socios por sucursal")
+    void obtenerPorSucursalOk(){
+
+        socio.setSucursal("SAN_BERNARDO");
+
+        when(service.obtenerSociosPorSucursal("SAN_BERNARDO"))
+                .thenReturn(List.of(socio));
+
+        ResponseEntity<List<socioModel>> response =
+                controller.obtenerPorSucursal("SAN_BERNARDO");
+
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        assertEquals(
+                "SAN_BERNARDO",
+                response.getBody().getFirst().getSucursal()
+        );
+    }
+
+    @Test
+    @DisplayName("Código 404 - No existen socios en sucursal")
+    void obtenerPorSucursalNotFound(){
+
+        when(service.obtenerSociosPorSucursal("VALDIVIA"))
+                .thenThrow(new RuntimeException("No existen socios"));
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> controller.obtenerPorSucursal("VALDIVIA")
+        );
+    }
+
+    @Test
+    @DisplayName("Código 200 - Buscar socios inactivos")
+    void obtenerInactivosOk(){
+
+        LocalDate fecha = LocalDate.of(2026,6,1);
+
+        socio.setUltimoAcceso(
+                LocalDate.of(2026,5,1)
+        );
+
+
+        when(service.obtenerSociosInactivos(fecha))
+                .thenReturn(List.of(socio));
+
+
+        ResponseEntity<List<socioModel>> response =
+                controller.obtenerInactivos(fecha);
+
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+    }
+
+    @Test
+    @DisplayName("Código 404 - No existen socios inactivos")
+    void obtenerInactivosNotFound(){
+
+        LocalDate fecha = LocalDate.of(2026,6,1);
+
+        when(service.obtenerSociosInactivos(fecha))
+                .thenThrow(new RuntimeException("No existen socios inactivos"));
+
+
+        assertThrows(
+                RuntimeException.class,
+                () -> controller.obtenerInactivos(fecha)
+        );
+    }
+
     // 201 CREATED
     @Test
     @DisplayName("Código 201 - Crear socio correctamente")
