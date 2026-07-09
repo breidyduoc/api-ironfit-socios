@@ -6,28 +6,34 @@ Microservicio encargado de la gestión de socios dentro del sistema IronFit.
 
 Permite:
 
-- Registrar socios  
-- Consultar socios  
-- Actualizar información  
-- Modificar estado  
-- Eliminar socios  
+- Registrar socios
+- Consultar socios
+- Actualizar información de socios
+- Modificar estado de un socio
+- Eliminar socios
+- Buscar socios por RUT
+- Buscar socios por estado
+- Buscar socios por edad
+- Buscar socios por sucursal
+- Consultar socios inactivos según fecha
+- Integración con la API Finanzas para consultas financieras
 
 ---
 
 ## Tecnologías utilizadas
 
-- Java 21  
-- Spring Boot  
-- Spring Data JPA  
-- Oracle Database  
-- Oracle SQL Developer  
-- Swagger/OpenAPI  
-- Maven  
-- Lombok  
-- Validation API  
-- JUnit 5  
-- Mockito  
-- Global Exception Handler (@RestControllerAdvice)  
+- Java 21
+- Spring Boot
+- Spring Data JPA
+- Oracle Database
+- Oracle SQL Developer
+- Swagger/OpenAPI
+- Maven
+- Lombok
+- Jakarta Validation
+- JUnit 5
+- Mockito
+- Global Exception Handler (`@RestControllerAdvice`)
 
 ---
 
@@ -42,7 +48,8 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASSWORD}
 ```
-## Variables de entorno
+
+Variables de entorno:
 
 ```env
 DB_URL=jdbc:oracle:thin:@localhost:1521:xe
@@ -50,11 +57,13 @@ DB_USER=TU_USUARIO
 DB_PASSWORD=TU_PASSWORD
 ```
 
+> Para la evaluación también puede configurarse directamente la conexión dentro del `application.yml`.
+
 ---
 
 ## Script SQL
 
-crear tabla:
+Crear tabla:
 
 ```sql
 CREATE TABLE SOCIO (
@@ -69,18 +78,21 @@ CREATE TABLE SOCIO (
 );
 ```
 
+---
+
 ## Ejecución
 
-- Clonar repositorio
-- Configurar variables de entorno
-- Ejecutar script SQL en Oracle
+- Clonar el repositorio.
+- Configurar la conexión a Oracle.
+- Ejecutar el script SQL.
 - Ejecutar:
+
 ```bash
 mvn clean install
 mvn spring-boot:run
 ```
 
---
+---
 
 ## Puerto
 
@@ -90,32 +102,53 @@ mvn spring-boot:run
 
 ## Swagger
 
+```
 http://localhost:21502/swagger-ui/index.html
+```
 
 ---
 
-## Endpoints principales
-- GET /api/v3/socios
-- GET /api/v3/socios/{id}
-- GET /api/v3/socios/rut/{rut}
-- GET /api/v3/socios/estado/{estado}
-- GET /api/v3/socios/edad/{edad}
-- POST /api/v3/socios
-- PUT /api/v3/socios/{id}
-- PATCH /api/v3/socios/{id}
-- DELETE /api/v3/socios/{id}
+# Endpoints principales
+
+## Consultas
+
+- GET /api/v4/socios
+- GET /api/v4/socios/{id}
+- GET /api/v4/socios/rut/{rut}
+- GET /api/v4/socios/estado/{estado}
+- GET /api/v4/socios/edad/{edad}
+- GET /api/v4/socios/sucursal/{sucursal}
+- GET /api/v4/socios/inactivos?fecha={fecha}
+
+## Gestión
+
+- POST /api/v4/socios
+- PUT /api/v4/socios/{id}
+- PATCH /api/v4/socios/{id}
+- DELETE /api/v4/socios/{id}
+
+---
+
+## Integración entre microservicios
+
+La API Socios entrega información utilizada por la API Finanzas para validar el estado de un socio durante la consulta de deudas.
+
+La comunicación entre ambos microservicios se realiza mediante **RestTemplate**.
 
 ---
 
 ## Manejo global de excepciones
 
-El proyecto implementa un @RestControllerAdvice para centralizar el manejo de errores.
+El proyecto implementa un Global Exception Handler para centralizar el manejo de errores.
 
 ### Errores gestionados
 
--400 Bad Request → errores de validación o datos inválidos
--404 Not Found → socio no encontrado
--500 Internal Server Error → errores inesperados del sistema
+- 200 OK
+- 201 Created
+- 204 No Content
+- 400 Bad Request
+- 404 Not Found
+- 500 Internal Server Error
 
 ---
 
@@ -123,11 +156,11 @@ El proyecto implementa un @RestControllerAdvice para centralizar el manejo de er
 
 ```json
 {
-  "fecha": "2026-06-28T12:30:00",
+  "fecha": "2026-07-09T12:30:00",
   "status": 404,
   "error": "Not Found",
   "mensaje": "El socio solicitado no existe",
-  "ruta": "/api/v3/socios/99"
+  "ruta": "/api/v4/socios/99"
 }
 ```
 
@@ -135,17 +168,17 @@ El proyecto implementa un @RestControllerAdvice para centralizar el manejo de er
 
 ### Beneficios
 
-- Centraliza excepciones
-- Mantiene respuestas consistentes
-- Mejora trazabilidad
-- Facilita pruebas
-- Testing
+- Centraliza el manejo de excepciones.
+- Respuestas consistentes para todos los endpoints.
+- Facilita el mantenimiento.
+- Mejora el diagnóstico de errores.
+- Incrementa la cobertura de pruebas.
 
 ---
 
 ## Testing
 
-Incluye pruebas unitarias de:
+El proyecto incluye pruebas unitarias para:
 
 - Model
 - Service
@@ -153,8 +186,24 @@ Incluye pruebas unitarias de:
 
 ### Cobertura
 
-- 200 OK  
-- 201 CREATED  
-- 400 BAD REQUEST  
-- 404 NOT FOUND  
-- 500 INTERNAL SERVER ERROR  
+- 200 OK
+- 201 Created
+- 204 No Content
+- 400 Bad Request
+- 404 Not Found
+- 500 Internal Server Error
+
+Se incluyen pruebas para:
+
+- Obtener todos los socios.
+- Buscar por ID.
+- Buscar por RUT.
+- Buscar por estado.
+- Buscar por edad.
+- Buscar por sucursal.
+- Buscar socios inactivos.
+- Registrar socios.
+- Actualizar información.
+- Actualizar estado.
+- Eliminar socios.
+- Manejo de excepciones mediante Global Exception Handler.
